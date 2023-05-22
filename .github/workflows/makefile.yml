@@ -1,0 +1,28 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update && \
+          sudo apt-get install -yq cmake libmodbus-dev
+  
+      - name: Build and Install the library
+        run: |
+          mkdir build && cd build && \
+          cmake .. && make && sudo make install
+        
+      - name: Build and Run Tests
+        run: |
+         lua demo.lua
